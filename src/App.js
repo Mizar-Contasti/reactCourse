@@ -1,92 +1,64 @@
 import { Component } from "react";
+import "./App.css";
 
-class Input extends Component {
-  //   state = { valor: "" };
-  //   handleChange = (value) => {
-  //     this.setState({ valor: value });
-  //   };
-
-  render() {
-    return <input value={this.props.value} onChange={this.props.onChange} />;
-  }
-}
+import Productos from "./components/Productos";
+import Layout from "./components/Layout";
+import Title from "./components/Title";
+import Navbar from "./components/Navbar";
 
 class App extends Component {
   state = {
-    nombre: "",
-    apellido: "",
+    productos: [
+      { name: "Tomate", price: "1500", img: "./productos/tomate.jpg" },
+      { name: "Arbejas", price: "2500", img: "./productos/arbejas.jpg" },
+      { name: "lechuga", price: "500", img: "./productos/lechuga.jpg" },
+    ],
+    carro: [],
+    esCarroVisible: false,
   };
 
-  updateNombre(v) {
-    this.updateValues("nombre", v.target.value);
-  }
+  agregarAlCarro = (producto) => {
+    const { carro } = this.state;
 
-  //   updateValues = (prop, value) => {
-  //     this.setState({ [prop]: value });
-  //   };
-  updateValues(prop, value) {
-    this.setState({ [prop]: value });
-  }
+    if (carro.find((x) => x.name === producto.name)) {
+      const newCarro = carro.map((x) =>
+        x.name === producto.name ? { ...x, cantidad: x.cantidad + 1 } : x
+      );
+      return this.setState({ carro: newCarro });
+    }
+    return this.setState({
+      carro: this.state.carro.concat({ ...producto, cantidad: 1 }),
+    });
+  };
+
+  mostrarCarro = () => {
+    if (!this.state.carro.length) {
+      return;
+    }
+    this.setState({ esCarroVisible: !this.state.esCarroVisible });
+  };
 
   render() {
+    const { esCarroVisible } = this.state;
+    // console.log(esCarroVisible);
     return (
-      <p>
-        Nombre Completo : {`${this.state.nombre}   ${this.state.apellido}`}
-        <Input
-          value={this.state.nombre}
-          onChange={(e) => this.updateValues("nombre", e.target.value)}
+      <div>
+        <Navbar
+          carro={this.state.carro}
+          esCarroVisible={esCarroVisible}
+          mostrarCarro={this.mostrarCarro}
         />
-        <Input
-          value={this.state.apellido}
-          onChange={
-            //   (e) => this.updateValues("apellido", e.target.value)
-            this.updateNombre()
-          }
-        />
-      </p>
+        <Layout>
+          <Title />
+
+          <Productos
+            agregarAlCarro={this.agregarAlCarro}
+            productos={this.state.productos}
+          />
+        </Layout>
+      </div>
     );
   }
 }
-
-// class Button extends Component {
-//   state = {};
-//   constructor(props) {
-//     super(props);
-//     console.log("constructor", props);
-//   }
-
-//   componentDidMount() {
-//     console.log("compoenentDidMount");
-//   }
-
-//   componentDidUpdate(prevProps, prevState) {
-//     console.log("component did update", prevProps, prevState);
-//   }
-
-//   componentWillUnmount() {
-//     console.log("desmontando componente", this.props, this.state);
-//   }
-
-//   render() {
-//     console.log("ejecutando metodo render de button");
-//     return <button onClick={() => this.setState({ prop: 1 })}>Enviar</button>;
-//   }
-// }
-
-// class App extends Component {
-//   state = { valor: 3 };
-//   render() {
-//     console.log(this.state);
-//     return (
-//       <div>
-//         <p>Hola mundo</p>
-//         {this.state.valor === 3 ? <Button chanchito="feliz" /> : null}
-//         <button onClick={() => this.setState({ valor: 2 })}>
-//           Enviar en App
-//         </button>
-//       </div>
-//     );
-//   }
-// }
 
 export default App;
