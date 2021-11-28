@@ -4,6 +4,9 @@
   color: white;
   border: none;
   padding: 15px 25px;
-  cursor: pointer; }
-  .btn:hover {
-    background-color: #750; }
+  cursor: pointer;
+
+  &:hover {
+    background-color: #750;
+  }
+}
