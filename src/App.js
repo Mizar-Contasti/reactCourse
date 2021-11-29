@@ -1,92 +1,82 @@
-import { Component } from "react";
+import { useState } from "react";
 
-class Input extends Component {
-  //   state = { valor: "" };
-  //   handleChange = (value) => {
-  //     this.setState({ valor: value });
-  //   };
+const App = () => {
+  const [value, setValue] = useState({
+    normal: "aqui se coloca un valor por defecto",
+    texto: "texto por defecto",
+    select: "feliz",
+    check: false,
+    estado: "feliz",
+  });
 
-  render() {
-    return <input value={this.props.value} onChange={this.props.onChange} />;
-  }
-}
+  const handleChange = ({ target }) => {
+    // console.log(target.value, target.checked);
+    // console.log(e.target.name);
 
-class App extends Component {
-  state = {
-    nombre: "",
-    apellido: "",
+    setValue((state) => ({
+      ...state,
+      [target.name]: target.type === "checkbox" ? target.checked : target.value,
+    }));
+
+    // setValue({ [e.target.name]: e.target.value });
   };
 
-  updateNombre(v) {
-    this.updateValues("nombre", v.target.value);
-  }
+  console.log(value);
 
-  //   updateValues = (prop, value) => {
-  //     this.setState({ [prop]: value });
-  //   };
-  updateValues(prop, value) {
-    this.setState({ [prop]: value });
-  }
+  return (
+    <div>
+      {/* {value.length < 5 ? <span>Longitud minima de 5</span> : null} */}
+      <input
+        name="normal"
+        type="text"
+        value={value.normal}
+        onChange={handleChange}
+      />
+      <textarea name="texto" onChange={handleChange} value={value.texto} />
 
-  render() {
-    return (
-      <p>
-        Nombre Completo : {`${this.state.nombre}   ${this.state.apellido}`}
-        <Input
-          value={this.state.nombre}
-          onChange={(e) => this.updateValues("nombre", e.target.value)}
+      <select value={value.select} name="select" onChange={handleChange}>
+        <option value="">Seleccione</option>
+        <option value="feliz">Feliz</option>
+        <option value="triste">triste</option>
+        <option value="molesto">molesto</option>
+      </select>
+
+      <input
+        type="checkbox"
+        name="check"
+        onChange={handleChange}
+        checked={value.check}
+      />
+
+      <div>
+        <label>Chancho</label>
+        <input
+          onChange={handleChange}
+          type="radio"
+          value="feliz"
+          name="estado"
+          checked={value.estado === "feliz"}
         />
-        <Input
-          value={this.state.apellido}
-          onChange={
-            //   (e) => this.updateValues("apellido", e.target.value)
-            this.updateNombre()
-          }
+        Feliz
+        <input
+          onChange={handleChange}
+          type="radio"
+          value="triste"
+          name="estado"
+          checked={value.estado === "triste"}
         />
-      </p>
-    );
-  }
-}
-
-// class Button extends Component {
-//   state = {};
-//   constructor(props) {
-//     super(props);
-//     console.log("constructor", props);
-//   }
-
-//   componentDidMount() {
-//     console.log("compoenentDidMount");
-//   }
-
-//   componentDidUpdate(prevProps, prevState) {
-//     console.log("component did update", prevProps, prevState);
-//   }
-
-//   componentWillUnmount() {
-//     console.log("desmontando componente", this.props, this.state);
-//   }
-
-//   render() {
-//     console.log("ejecutando metodo render de button");
-//     return <button onClick={() => this.setState({ prop: 1 })}>Enviar</button>;
-//   }
-// }
-
-// class App extends Component {
-//   state = { valor: 3 };
-//   render() {
-//     console.log(this.state);
-//     return (
-//       <div>
-//         <p>Hola mundo</p>
-//         {this.state.valor === 3 ? <Button chanchito="feliz" /> : null}
-//         <button onClick={() => this.setState({ valor: 2 })}>
-//           Enviar en App
-//         </button>
-//       </div>
-//     );
-//   }
-// }
+        triste
+        <input
+          onChange={handleChange}
+          type="radio"
+          value="felipe"
+          name="estado"
+          checked={value.estado === "felipe"}
+        />
+        felipe
+      </div>
+    </div>
+  );
+};
 
 export default App;
