@@ -1,92 +1,69 @@
-import { Component } from "react";
+import { useState } from "react";
+import useFormulario from "./hooks/useFormulario";
+import Input from "./components/Input";
+import "./App.css";
+import Card from "./components/Card";
+import Container from "./components/Container";
+import Button from "./components/Button";
 
-class Input extends Component {
-  //   state = { valor: "" };
-  //   handleChange = (value) => {
-  //     this.setState({ valor: value });
-  //   };
+function App() {
+  const [usuarios, setUsuarios] = useState([]);
+  const [formulario, handleChange, reset] = useFormulario({
+    name: "",
+    lastname: "",
+    email: "",
+  });
 
-  render() {
-    return <input value={this.props.value} onChange={this.props.onChange} />;
-  }
-}
-
-class App extends Component {
-  state = {
-    nombre: "",
-    apellido: "",
+  const submit = (e) => {
+    e.preventDefault();
+    setUsuarios([...usuarios, formulario]);
+    reset();
   };
 
-  updateNombre(v) {
-    this.updateValues("nombre", v.target.value);
-  }
+  // console.log(usuarios);
+  return (
+    <div style={{ marginTop: "15%" }}>
+      <Container>
+        <Card>
+          <div style={{ padding: 20 }}>
+            <form onSubmit={submit}>
+              <Input
+                label={"Nombre"}
+                name={"name"}
+                value={formulario.name}
+                onChange={handleChange}
+                placeholder={"Nombre"}
+              />
 
-  //   updateValues = (prop, value) => {
-  //     this.setState({ [prop]: value });
-  //   };
-  updateValues(prop, value) {
-    this.setState({ [prop]: value });
-  }
+              <Input
+                label={"Apellido"}
+                name={"lastname"}
+                value={formulario.lastname}
+                onChange={handleChange}
+                placeholder={"Apellido"}
+              />
 
-  render() {
-    return (
-      <p>
-        Nombre Completo : {`${this.state.nombre}   ${this.state.apellido}`}
-        <Input
-          value={this.state.nombre}
-          onChange={(e) => this.updateValues("nombre", e.target.value)}
-        />
-        <Input
-          value={this.state.apellido}
-          onChange={
-            //   (e) => this.updateValues("apellido", e.target.value)
-            this.updateNombre()
-          }
-        />
-      </p>
-    );
-  }
+              <Input
+                label={"Email"}
+                name={"email"}
+                value={formulario.email}
+                onChange={handleChange}
+                placeholder={"Email"}
+              />
+              <Button>Enviar</Button>
+            </form>
+          </div>
+        </Card>
+        <Card>
+          <ul>
+            {usuarios.map((x) => (
+              <li key={x.email}>{`${x.name}   ${x.lastname} : ${x.email}`}</li>
+            ))}
+          </ul>
+        </Card>
+      </Container>
+    </div>
+  );
 }
-
-// class Button extends Component {
-//   state = {};
-//   constructor(props) {
-//     super(props);
-//     console.log("constructor", props);
-//   }
-
-//   componentDidMount() {
-//     console.log("compoenentDidMount");
-//   }
-
-//   componentDidUpdate(prevProps, prevState) {
-//     console.log("component did update", prevProps, prevState);
-//   }
-
-//   componentWillUnmount() {
-//     console.log("desmontando componente", this.props, this.state);
-//   }
-
-//   render() {
-//     console.log("ejecutando metodo render de button");
-//     return <button onClick={() => this.setState({ prop: 1 })}>Enviar</button>;
-//   }
-// }
-
-// class App extends Component {
-//   state = { valor: 3 };
-//   render() {
-//     console.log(this.state);
-//     return (
-//       <div>
-//         <p>Hola mundo</p>
-//         {this.state.valor === 3 ? <Button chanchito="feliz" /> : null}
-//         <button onClick={() => this.setState({ valor: 2 })}>
-//           Enviar en App
-//         </button>
-//       </div>
-//     );
-//   }
-// }
 
 export default App;
